@@ -1,0 +1,10 @@
+[Core]
+name = Pandascore
+module = pandascore
+
+[Documentation]
+description = Basic Pandascore API Err integration
+
+[Python]
+version = 3
+
