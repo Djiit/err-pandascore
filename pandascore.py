@@ -3,6 +3,7 @@ from __future__ import (absolute_import, division,
                         print_function, unicode_literals)
 
 from itertools import chain
+from os import environ
 import logging
 import json
 
@@ -13,7 +14,7 @@ except ImportError:
 
 from errbot import BotPlugin, botcmd
 
-CONFIG_TEMPLATE = {'PANDASCORE_API_KEY': 'your_api_key_here'}
+CONFIG_TEMPLATE = {'PANDASCORE_API_KEY': environ.get('PANDASCORE_API_KEY','your_api_key_here')}
 PANDASCORE_API_ROOT = 'api.pandascore.co'
 
 class Pandascore(BotPlugin):
@@ -52,7 +53,7 @@ class Pandascore(BotPlugin):
         ))
         return json.loads(conn.getresponse().read().decode())
 
-    @botcmd(split_args_with=None)
+    @botcmd(split_args_with=None, template='player')
     def player(self, message, args):
         """
         Fetch and display information about a given player.
@@ -73,16 +74,20 @@ class Pandascore(BotPlugin):
         elif len(res) == 0:
             return 'Meh, didn\'t found anyone with this name.'
 
-        # Respond with a card now
-        self.send_card(title=f"{res[0]['first_name']} \"{res[0]['name']}\" {res[0]['last_name']}",
-                       thumbnail=res[0]['image_url'],
-                       fields=(('Game',res[0]['current_videogame']['name']),
-                               ('Team',res[0]['current_team']['name']),
-                               ('Role',res[0]['role']),
-                               ('Pandascore ID',res[0]['id'])),
-                       in_reply_to=message  )
+        # Return template context
+        return {'player': res[0]}
 
-    @botcmd(split_args_with=None)
+        # Respond with a card now
+        # self.send_card(title=f"{res[0]['first_name']} \"{res[0]['name']}\" {res[0]['last_name']}",
+        #                # body=response,
+        #                thumbnail=res[0]['image_url'],
+        #                fields=(('Game', res[0]['current_videogame']['name']),
+        #                        ('Team', res[0]['current_team']['name']),
+        #                        ('Role', res[0]['role']),
+        #                        ('Pandascore ID', res[0]['id'])),
+        #                in_reply_to=message  )
+
+    @botcmd(split_args_with=None, template='player')
     def whos(self, message, args):
         """
         Alias for "player".

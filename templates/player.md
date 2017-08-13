@@ -1,0 +1,1 @@
+{{player['first_name']}} "{{player['name']}}" {{player['last_name']}} is a {{player['current_videogame']['name']}} player for {{player['current_team']['name']}}, as a {{player['role']}}. PandaScore ID : {{player['id']}}
