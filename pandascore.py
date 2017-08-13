@@ -118,7 +118,7 @@ class Pandascore(BotPlugin):
         if len(res) > 1:
             return f"I found : {', '.join([p['name']+' (id: '+str(p['id'])+')' for p in res])}. Which one should I describe ?"
         elif len(res) == 0:
-            return 'Sorry, I didn\'t found anyone with this name.'
+            return 'Sorry, I didn\'t found any team with this name.'
 
         return {'team': res[0]}
 
