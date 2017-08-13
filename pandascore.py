@@ -4,6 +4,7 @@ from __future__ import (absolute_import, division,
 
 from itertools import chain
 from os import environ
+import urllib.parse
 import logging
 import json
 
@@ -49,22 +50,23 @@ class Pandascore(BotPlugin):
         conn.request('GET', '{endpoint}?token={token}{params}'.format(
             endpoint=endpoint,
             token=self.config['PANDASCORE_API_KEY'],
-            params= '&'+params if params else ''
+            params='&' + urllib.parse.urlencode(params) if params else ''
         ))
         return json.loads(conn.getresponse().read().decode())
 
-    @botcmd(split_args_with=None, template='player')
+    @botcmd(template='player')
     def player(self, message, args):
         """
         Fetch and display information about a given player.
         """
         if len(args) == 0:
-            return 'You need to give me a name.'
+            return 'You need to give me a name or PandaScore ID.'
+
         # Sanitize params
-        params = 'filter[name]='+args[0].strip('"') if ('"' in args[0]) else 'search[name]='+args[0]
+        params = {'filter[name]': args.strip('"')} if ('"' in args) else {'search[name]': args}
 
         # Fetch Pandascore API
-        self.log.debug(f'Quering players endpoint with params: {params})')
+        self.log.debug(f'Quering players endpoint with params: {params}')
         res = self.query('/players', params)
 
         # Handle result(s)
@@ -72,12 +74,10 @@ class Pandascore(BotPlugin):
         if len(res) > 1:
             return f"I found : {', '.join([p['name']+' (id: '+str(p['id'])+')' for p in res])}. Which one should I describe ?"
         elif len(res) == 0:
-            return 'Meh, didn\'t found anyone with this name.'
+            return 'Sorry, I didn\'t found anyone with this name.'
 
-        # Return template context
-        return {'player': res[0]}
-
-        # Respond with a card now
+        # FIXME: How do we check if the bakend support cards ?
+        # # Respond with a card now
         # self.send_card(title=f"{res[0]['first_name']} \"{res[0]['name']}\" {res[0]['last_name']}",
         #                # body=response,
         #                thumbnail=res[0]['image_url'],
@@ -87,9 +87,52 @@ class Pandascore(BotPlugin):
         #                        ('Pandascore ID', res[0]['id'])),
         #                in_reply_to=message  )
 
-    @botcmd(split_args_with=None, template='player')
+        # Return template context
+        return {'player': res[0]}
+
+    @botcmd(template='player')
     def whos(self, message, args):
         """
         Alias for "player".
         """
         return self.player(message, args)
+
+    @botcmd(template='team')
+    def team(self, message, args):
+        """
+        Fetch and display information about a given team.
+        """
+        self.log.debug(args)
+        if len(args) == 0:
+            return 'You need to give me a name or PandaScore ID.'
+
+        # Sanitize params
+        params = {'filter[name]': args.strip('"')} if ('"' in args) else {'search[name]': args}
+
+        # Fetch Pandascore API
+        self.log.debug(f'Quering teams endpoint with params: {params}')
+        res = self.query('/teams', params)
+
+        # Handle result(s)
+        self.log.debug(f'Got results: {res})')
+        if len(res) > 1:
+            return f"I found : {', '.join([p['name']+' (id: '+str(p['id'])+')' for p in res])}. Which one should I describe ?"
+        elif len(res) == 0:
+            return 'Sorry, I didn\'t found anyone with this name.'
+
+        return {'team': res[0]}
+
+    @botcmd(template='matches')
+    def matches(self, message, args):
+        """
+        Fetch and display information about last 10 matches in DB. (EXPERIMENTAL)
+        """
+        # Fetch Pandascore API
+        self.log.debug(f'Quering matches endpoint')
+        res = self.query('/matches', {'per_page': 10})
+
+        # Handle result(s)
+        self.log.debug(f'Got results: {res})')
+
+        # Return template context
+        return {'matches': res}
