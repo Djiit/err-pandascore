@@ -9,6 +9,7 @@ Err-pandascore is a plugin for [Err](https://github.com/gbin/err) that allows yo
 ## Features
 
 * Basic player search/profile display.
+* Basic team search/profile display.
 * Support AUTOINSTALL_DEPS thanks to the `requirements.txt` file.
 
 Have an idea ? Open an [issue](https://github.com/Djiit/err-pandascore/issues) or send me a [Pull Request](https://github.com/Djiit/err-pandascore/pulls).
