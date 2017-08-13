@@ -11,3 +11,8 @@ class TestPandascorePlugin(object):
         testbot.push_message('!player')
         assert ('You need to give me a name.'
                 in testbot.pop_message())
+
+    def test_pandascore_player(self, testbot):
+        testbot.push_message('!player "Faker"')
+        assert ('Sanghyeok "Faker" Lee is a LoL player for SK telecom T1, as a mid. PandaScore ID : 585'
+                in testbot.pop_message())
