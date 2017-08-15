@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/Djiit/err-pandascore.svg?branch=master)](https://travis-ci.org/Djiit/err-pandascore) [![Coverage Status](https://coveralls.io/repos/github/Djiit/err-pandascore/badge.svg?branch=master)](https://coveralls.io/github/Djiit/err-pandascore?branch=master)
 
-Err-pandascore is a plugin for [Err](https://github.com/gbin/err) that allows you to interact with the [pandascore.co](http://pandascore.co) API. **It requires Python 3.6+**.
+Err-pandascore is a plugin for [Err](https://github.com/gbin/err) that allows you to interact with the [PandaScore](http://pandascore.co) API. **It requires Python 3.6+**.
 
 **Note: This is a very alpha release. This plugin is subject to major changes.**
 
@@ -10,7 +10,6 @@ Err-pandascore is a plugin for [Err](https://github.com/gbin/err) that allows yo
 
 * Basic player search/profile display.
 * Basic team search/profile display.
-* Support AUTOINSTALL_DEPS thanks to the `requirements.txt` file.
 
 Have an idea ? Open an [issue](https://github.com/Djiit/err-pandascore/issues) or send me a [Pull Request](https://github.com/Djiit/err-pandascore/pulls).
 
