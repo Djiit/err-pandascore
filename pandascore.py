@@ -77,18 +77,17 @@ class Pandascore(BotPlugin):
             return 'Sorry, I didn\'t found anyone with this name.'
 
         # FIXME: How do we check if the bakend support cards ?
-        # # Respond with a card now
-        # self.send_card(title=f"{res[0]['first_name']} \"{res[0]['name']}\" {res[0]['last_name']}",
-        #                # body=response,
-        #                thumbnail=res[0]['image_url'],
-        #                fields=(('Game', res[0]['current_videogame']['name']),
-        #                        ('Team', res[0]['current_team']['name']),
-        #                        ('Role', res[0]['role']),
-        #                        ('Pandascore ID', res[0]['id'])),
-        #                in_reply_to=message  )
+        # if not, return template context
+        # return {'player': res[0]}
 
-        # Return template context
-        return {'player': res[0]}
+        # # Respond with a card now
+        self.send_card(title=f"{res[0]['first_name']} \"{res[0]['name']}\" {res[0]['last_name']}",
+                       thumbnail=res[0]['image_url'],
+                       fields=(('Game', res[0]['current_videogame']['name']),
+                               ('Team', res[0]['current_team']['name']),
+                               ('Role', res[0]['role']),
+                               ('Pandascore ID', res[0]['id'])),
+                       in_reply_to=message)
 
     @botcmd(template='player')
     def whos(self, message, args):
